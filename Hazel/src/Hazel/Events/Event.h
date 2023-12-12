@@ -56,20 +56,18 @@ namespace Hazel {
 	{
 		template<typename T>
 		using EventFn = std::function<bool(T&)>;
+
 	public:
 		EventDispatcher(Event& event)
 			: m_Event(event)
 		{
 		}
 
-		// F will be deduced by the compiler
 		template<typename T>
 		bool Dispatch(EventFn<T> func)
 		{
 			if (m_Event.GetEventType() == T::GetStaticType())
 			{
-				// If the event is of type T, then we call the function
-				// and return true to indicate that the event was handled
 				m_Event.m_Handled = func(*(T*)&m_Event);
 				return true;
 			}
