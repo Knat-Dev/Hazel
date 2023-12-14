@@ -63,9 +63,9 @@ namespace Hazel {
 		Application& app = Application::Get();
 		io.DisplaySize = ImVec2(app.GetWindow().GetWidth(), app.GetWindow().GetHeight());
 
-		float dt = (float)glfwGetTime();
-		io.DeltaTime = m_Time > 0.0f ? (dt - m_Time) : (1.0f / 60.0f);
-		m_Time = dt;
+		float time = (float)glfwGetTime();
+		io.DeltaTime = m_Time > 0.0f ? (time - m_Time) : (1.0f / 60.0f);
+		m_Time = time;
 
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui::NewFrame();
@@ -95,20 +95,21 @@ namespace Hazel {
 		io.MouseDown[e.GetMouseButton()] = true;
 		return false;
 	}
+
 	bool ImGuiLayer::OnMouseButtonReleasedEvent(MouseButtonReleasedEvent& e)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		io.MouseDown[e.GetMouseButton()] = false;
 		return false;
-
 	}
+
 	bool ImGuiLayer::OnMouseMovedEvent(MouseMovedEvent& e)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		io.MousePos = ImVec2(e.GetX(), e.GetY());
 		return false;
-
 	}
+
 	bool ImGuiLayer::OnMouseScrolledEvent(MouseScrolledEvent& e)
 	{
 		ImGuiIO& io = ImGui::GetIO();
@@ -140,8 +141,10 @@ namespace Hazel {
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		unsigned int keycode = e.GetKeyCode();
+
 		if (keycode < 0x10000)
 			io.AddInputCharacter(keycode);
+
 		return false;
 	}
 
