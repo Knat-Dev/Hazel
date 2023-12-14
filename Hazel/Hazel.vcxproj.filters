@@ -37,10 +37,10 @@
     <ClInclude Include="src\Hazel\Events\MouseEvent.h">
       <Filter>Hazel\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Layer.h">
+    <ClInclude Include="src\Hazel\Layers\Layer.h">
       <Filter>Hazel</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\LayerStack.h">
+    <ClInclude Include="src\Hazel\Layers\LayerStack.h">
       <Filter>Hazel</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Log.h">
@@ -61,10 +61,10 @@
     <ClCompile Include="src\Hazel\Application.cpp">
       <Filter>Hazel</Filter>
     </ClCompile>
-    <ClCompile Include="src\Hazel\Layer.cpp">
+    <ClCompile Include="src\Hazel\Layers\Layer.cpp">
       <Filter>Hazel</Filter>
     </ClCompile>
-    <ClCompile Include="src\Hazel\LayerStack.cpp">
+    <ClCompile Include="src\Hazel\Layers\LayerStack.cpp">
       <Filter>Hazel</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Log.cpp">
