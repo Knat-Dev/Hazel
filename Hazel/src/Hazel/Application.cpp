@@ -2,8 +2,8 @@
 
 #include "Application.h"
 
-
 #include <glad/glad.h>
+#include <imgui.h>
 
 namespace Hazel {
 
@@ -20,6 +20,7 @@ namespace Hazel {
 
 	Application::~Application()
 	{
+		ImGui::DestroyContext();
 	}
 
 	void Application::PushLayer(Layer* layer)
@@ -52,7 +53,7 @@ namespace Hazel {
 	void Application::Run()
 	{
 		while (m_Running) {
-			glClearColor(1, 0, 1, 1);
+			glClearColor(.5, 0.1, 1, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			for (Layer* layer : m_LayerStack)
