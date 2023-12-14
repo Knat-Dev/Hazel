@@ -107,16 +107,20 @@ project "Sandbox"
 	files {
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
-	}
+		"Hazel/vendor/imgui/*.h",
+		"Hazel/vendor/imgui/*.cpp"
+}
 
 	includedirs {
 		"Hazel/vendor/spdlog/include",
 		"Hazel/src",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"Hazel/vendor"
 	}
 
 	links {
-		"Hazel"
+		"Hazel",
+		"ImGui"
 	}
 
 	filter "system:windows"

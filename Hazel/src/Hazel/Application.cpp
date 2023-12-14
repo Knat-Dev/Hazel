@@ -25,6 +25,7 @@ namespace Hazel {
 
 	Application::~Application()
 	{
+		m_ImGuiLayer->OnDetach();
 	}
 
 	void Application::PushLayer(Layer* layer)
