@@ -4,10 +4,10 @@
 
 using namespace Hazel;
 
-class ExampleLayer : public Layer {
+class DemoLayer : public Layer {
 public:
-	ExampleLayer()
-		: Layer("Example")
+	DemoLayer()
+		: Layer("Demo")
 	{
 	}
 
@@ -165,7 +165,7 @@ private:
 class Sandbox : public Application {
 public:
 	Sandbox() {
-		PushLayer(new ExampleLayer());
+		PushLayer(new DemoLayer());
 	}
 	~Sandbox() { }
 };
