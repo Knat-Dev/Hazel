@@ -11,6 +11,11 @@
 #include "Hazel/KeyCodes.h"
 #include "Hazel/MouseButtonCodes.h"
 
+// ---Renderer-------------------------
+#include "Hazel/Renderer/Renderer.h"
+#include "Hazel/Renderer/Shader.h"
+// ------------------------------------
+
 // ---Entry Point---------------------
 #include "Hazel/EntryPoint.h"
 // -----------------------------------
