@@ -366,3 +366,5 @@ FodyWeavers.xsd
 /bin-int
 
 /Sandbox/imgui.ini
+/Hazel/vendor/**/bin-int/*
+/Hazel/vendor/**/bin/*
