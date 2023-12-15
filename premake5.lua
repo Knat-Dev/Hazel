@@ -68,7 +68,9 @@ project "Hazel"
 			defines {
 				"HZ_PLATFORM_WINDOWS",
 				"HZ_BUILD_DLL",
-				"GLFW_INCLUDE_NONE"
+				"GLFW_INCLUDE_NONE",
+				"_CRT_SECURE_NO_WARNINGS",
+				"IMGUI_API=__declspec(dllexport)"
 			}
 
 			postbuildcommands {
@@ -107,9 +109,7 @@ project "Sandbox"
 	files {
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
-		"Hazel/vendor/imgui/*.h",
-		"Hazel/vendor/imgui/*.cpp"
-}
+	}
 
 	includedirs {
 		"Hazel/vendor/spdlog/include",
@@ -120,7 +120,6 @@ project "Sandbox"
 
 	links {
 		"Hazel",
-		"ImGui"
 	}
 
 	filter "system:windows"
@@ -129,7 +128,8 @@ project "Sandbox"
 			systemversion "latest"
 
 			defines {
-				"HZ_PLATFORM_WINDOWS"
+				"HZ_PLATFORM_WINDOWS",
+				"IMGUI_API=__declspec(dllimport)"
 			}
 
 	filter "configurations:Debug"

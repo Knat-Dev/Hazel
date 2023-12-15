@@ -24,6 +24,16 @@ public:
 
 		}
 	}
+
+	void OnImGuiRender() override {
+		ImGui::Begin("Test");
+		ImGui::Text("Hello World");
+		ImGui::End();
+
+		ImGui::Begin("Test2");
+		ImGui::Text("Hello World");
+		ImGui::End();
+	}
 };
 
 
