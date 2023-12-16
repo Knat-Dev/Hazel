@@ -174,6 +174,45 @@ public:
 	}
 
 	void OnUpdate(Hazel::Timestep ts) override {
+		HandleKeyboardInput(ts);
+
+		Hazel::RenderCommand::SetClearColor({ 0.09020f, 0.10196f, 0.12157f, 1 });
+		Hazel::RenderCommand::Clear();
+
+		m_Camera.SetPosition(m_CameraPosition);
+		m_Camera.SetRotation(m_CameraRotation);
+
+		Hazel::Renderer::BeginScene(m_Camera);
+
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_FlatColorShader)->Bind();
+
+		for (int i = 0; i < 20; i++) {
+			for (int j = 0; j < 20; j++)
+			{
+				std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3("u_Color", (i + j) % 2 == 0 ? m_CheckerboardSquareColor1 : m_CheckerboardSquareColor2);
+
+
+				glm::vec3 pos(i * 0.11f, j * 0.11f, 0.0f);
+				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos + m_SquarePosition) * scale;
+				Hazel::Renderer::Submit(m_FlatColorShader, m_SquareVA, transform);
+			}
+		}
+
+		Hazel::Renderer::Submit(m_TriangleShader, m_TriangleVA);
+
+		Hazel::Renderer::EndScene();
+	}
+
+	void OnImGuiRender() override {
+		ImGui::Begin("Settings");
+		ImGui::ColorEdit3("Square Color", glm::value_ptr(m_CheckerboardSquareColor1));
+		ImGui::ColorEdit3("Square Color 2", glm::value_ptr(m_CheckerboardSquareColor2));
+		ImGui::End();
+	}
+
+	void HandleKeyboardInput(Hazel::Timestep ts) {
 		if (Hazel::Input::IsKeyPressed(HZ_KEY_LEFT))
 			m_CameraPosition.x -= m_CameraMoveSpeed * ts;
 		if (Hazel::Input::IsKeyPressed(HZ_KEY_RIGHT))
@@ -196,39 +235,6 @@ public:
 			m_SquarePosition.x -= m_SquareMoveSpeed * ts;
 		if (Hazel::Input::IsKeyPressed(HZ_KEY_L))
 			m_SquarePosition.x += m_SquareMoveSpeed * ts;
-
-
-
-		Hazel::RenderCommand::SetClearColor({ 0.09020f, 0.10196f, 0.12157f, 1 });
-		Hazel::RenderCommand::Clear();
-
-		m_Camera.SetPosition(m_CameraPosition);
-		m_Camera.SetRotation(m_CameraRotation);
-
-
-		Hazel::Renderer::BeginScene(m_Camera);
-
-		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
-
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_FlatColorShader)->Bind();
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3("u_Color", m_SquareColor);
-		for (int i = 0; i < 20; i++) {
-			for (int j = 0; j < 20; j++)
-			{
-				glm::vec3 pos(i * 0.11f, j * 0.11f, 0.0f);
-				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos + m_SquarePosition) * scale;
-				Hazel::Renderer::Submit(m_FlatColorShader, m_SquareVA, transform);
-			}
-		}
-		Hazel::Renderer::Submit(m_TriangleShader, m_TriangleVA);
-
-		Hazel::Renderer::EndScene();
-	}
-
-	void OnImGuiRender() override {
-		ImGui::Begin("Settings");
-		ImGui::ColorEdit3("Square Color", glm::value_ptr(m_SquareColor));
-		ImGui::End();
 	}
 private:
 	std::shared_ptr<Hazel::Shader> m_FlatColorShader;
@@ -248,7 +254,8 @@ private:
 	glm::vec3 m_SquarePosition;
 	float m_SquareMoveSpeed = 1.0f;
 
-	glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };
+	glm::vec3 m_CheckerboardSquareColor1 = { 0.2f, 0.3f, 0.8f };
+	glm::vec3 m_CheckerboardSquareColor2 = { 0.3f, 0.2f, 0.8f };
 };
 
 
