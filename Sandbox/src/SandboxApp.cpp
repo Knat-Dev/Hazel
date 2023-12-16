@@ -191,7 +191,8 @@ public:
 		for (int i = 0; i < 20; i++) {
 			for (int j = 0; j < 20; j++)
 			{
-				std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3("u_Color", (i + j) % 2 == 0 ? m_CheckerboardSquareColor1 : m_CheckerboardSquareColor2);
+				std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3("u_Color",
+					(i + j) % 2 == 0 ? m_CheckerboardSquareColor1 : m_CheckerboardSquareColor2);
 
 
 				glm::vec3 pos(i * 0.11f, j * 0.11f, 0.0f);
