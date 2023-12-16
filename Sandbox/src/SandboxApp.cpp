@@ -130,7 +130,6 @@ public:
 	}
 
 	void OnUpdate(Hazel::Timestep ts) override {
-		HZ_TRACE("{0}", ts);
 		if (Hazel::Input::IsKeyPressed(HZ_KEY_LEFT))
 			m_CameraPosition.x -= m_CameraMoveSpeed * ts;
 		if (Hazel::Input::IsKeyPressed(HZ_KEY_RIGHT))
