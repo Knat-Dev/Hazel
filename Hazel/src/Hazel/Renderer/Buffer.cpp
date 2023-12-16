@@ -18,6 +18,9 @@ namespace Hazel {
 		default:
 			break;
 		}
+
+		HZ_CORE_ASSERT(false, "Unknown RendererAPI!");
+		return nullptr;
 	}
 
 	IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t size)
@@ -32,5 +35,8 @@ namespace Hazel {
 		default:
 			break;
 		}
+
+		HZ_CORE_ASSERT(false, "Unknown RendererAPI!");
+		return nullptr;
 	}
 }
