@@ -207,8 +207,8 @@ public:
 
 	void OnImGuiRender() override {
 		ImGui::Begin("Settings");
-		ImGui::ColorEdit3("Square Color", glm::value_ptr(m_CheckerboardSquareColor1));
-		ImGui::ColorEdit3("Square Color 2", glm::value_ptr(m_CheckerboardSquareColor2));
+		ImGui::ColorEdit3("Checkerboard Color 1", glm::value_ptr(m_CheckerboardSquareColor1));
+		ImGui::ColorEdit3("Checkerboard Color 2", glm::value_ptr(m_CheckerboardSquareColor2));
 		ImGui::End();
 	}
 
@@ -254,6 +254,7 @@ private:
 	glm::vec3 m_SquarePosition;
 	float m_SquareMoveSpeed = 1.0f;
 
+	// Checkerboard
 	glm::vec3 m_CheckerboardSquareColor1 = { 0.2f, 0.3f, 0.8f };
 	glm::vec3 m_CheckerboardSquareColor2 = { 0.3f, 0.2f, 0.8f };
 };
