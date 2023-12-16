@@ -1,40 +1,35 @@
 #include <Hazel.h>
 
-using namespace Hazel;
-
-class DemoLayer : public Layer {
+class DemoLayer : public Hazel::Layer {
 public:
 	DemoLayer()
-		: Layer("Demo")
+		: Hazel::Layer("Demo"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f)
 	{
-	}
-
-	void OnAttach() override {
 		////////////////////////////////////////////
 		// Triangle ///////////////////////////////
 		//////////////////////////////////////////
-		m_TriangleVA.reset(VertexArray::Create());
+		m_TriangleVA.reset(Hazel::VertexArray::Create());
 
 		float vertices[3 * 7] = {
 			-0.5f, -0.5f, 0.0f, 0.3f, 0.2f, 0.8f, 1.0f,
 			 0.5f, -0.5f, 0.0f, 0.1f, 0.8f, 0.5f, 1.0f,
 			 0.0f,  0.5f, 0.0f, 0.7f, 0.2f, 0.65f, 1.0f
 		};
-		std::shared_ptr<VertexBuffer> triangleVB;
-		triangleVB.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+		std::shared_ptr<Hazel::VertexBuffer> triangleVB;
+		triangleVB.reset(Hazel::VertexBuffer::Create(vertices, sizeof(vertices)));
 
 		{
 			triangleVB->SetLayout({
-				{ ShaderDataType::Float3, "a_Position" },
-				{ ShaderDataType::Float4, "a_Color"}
+				{ Hazel::ShaderDataType::Float3, "a_Position" },
+				{ Hazel::ShaderDataType::Float4, "a_Color"}
 				});
 
 			m_TriangleVA->AddVertexBuffer(triangleVB);
 		}
 
 		uint32_t indices[3] = { 0, 1, 2 };
-		std::shared_ptr<IndexBuffer> triangleIB;
-		triangleIB.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		std::shared_ptr<Hazel::IndexBuffer> triangleIB;
+		triangleIB.reset(Hazel::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 
 		m_TriangleVA->SetIndexBuffer(triangleIB);
 
@@ -43,6 +38,8 @@ public:
 			
 			layout(location = 0) in vec3 a_Position;
 			layout(location = 1) in vec4 a_Color;
+
+			uniform mat4 u_ViewProjection;
 			
 			out vec3 v_Position;
 			out vec4 v_Color;
@@ -51,7 +48,7 @@ public:
 			{
 				v_Position = a_Position;
 				v_Color = a_Color;
-				gl_Position = vec4(a_Position, 1.0);
+				gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
 			}
 		)";
 
@@ -70,12 +67,12 @@ public:
 			}
 		)";
 
-		m_TriangleShader.reset(new Shader(triangleVertexSrc, triangleFragmentSrc));
+		m_TriangleShader.reset(new Hazel::Shader(triangleVertexSrc, triangleFragmentSrc));
 
 		////////////////////////////////////////////
 		// Square /////////////////////////////////
 		//////////////////////////////////////////
-		m_SquareVA.reset(VertexArray::Create());
+		m_SquareVA.reset(Hazel::VertexArray::Create());
 		float squareVertices[4 * 3] = {
 			-0.75f, -0.75f, 0.0f,
 			 0.75f, -0.75f, 0.0f,
@@ -83,19 +80,19 @@ public:
 			-0.75f,  0.75f, 0.0f
 		};
 
-		std::shared_ptr<VertexBuffer> squareVB;
-		squareVB.reset(VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+		std::shared_ptr<Hazel::VertexBuffer> squareVB;
+		squareVB.reset(Hazel::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 
 		{
 			squareVB->SetLayout({
-				{ ShaderDataType::Float3, "a_Position" }
+				{ Hazel::ShaderDataType::Float3, "a_Position" }
 				});
 			m_SquareVA->AddVertexBuffer(squareVB);
 		}
 
 		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-		std::shared_ptr<IndexBuffer> squareIB;
-		squareIB.reset(IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+		std::shared_ptr<Hazel::IndexBuffer> squareIB;
+		squareIB.reset(Hazel::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
 		m_SquareVA->SetIndexBuffer(squareIB);
 
 		std::string squareVertexSrc = R"(
@@ -103,12 +100,14 @@ public:
 			
 			layout(location = 0) in vec3 a_Position;
 			
+			uniform mat4 u_ViewProjection;
+
 			out vec3 v_Position;
 			
 			void main()
 			{
 				v_Position = a_Position;
-				gl_Position = vec4(a_Position, 1.0);
+				gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
 			}
 		)";
 
@@ -126,51 +125,65 @@ public:
 			}
 		)";
 
-		m_BackgroundShader.reset(new Shader(squareVertexSrc, squareFragmentSrc));
+		m_BackgroundShader.reset(new Hazel::Shader(squareVertexSrc, squareFragmentSrc));
+
 	}
 
 	void OnUpdate() override {
-		RenderCommand::SetClearColor({ 0.09020f, 0.10196f, 0.12157f, 1 });
-		RenderCommand::Clear();
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_LEFT))
+			m_CameraPosition.x -= m_CameraMoveSpeed;
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_RIGHT))
+			m_CameraPosition.x += m_CameraMoveSpeed;
 
-		Renderer::BeginScene();
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_UP))
+			m_CameraPosition.y += m_CameraMoveSpeed;
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_DOWN))
+			m_CameraPosition.y -= m_CameraMoveSpeed;
 
-		m_BackgroundShader->Bind();
-		Renderer::Submit(m_SquareVA);
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_A))
+			m_CameraRotation += m_CameraRotationSpeed;
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_D))
+			m_CameraRotation -= m_CameraRotationSpeed;
 
-		m_TriangleShader->Bind();
-		Renderer::Submit(m_TriangleVA);
 
-		Renderer::EndScene();
+		Hazel::RenderCommand::SetClearColor({ 0.09020f, 0.10196f, 0.12157f, 1 });
+		Hazel::RenderCommand::Clear();
+
+		m_Camera.SetPosition(m_CameraPosition);
+		m_Camera.SetRotation(m_CameraRotation);
+
+
+		Hazel::Renderer::BeginScene(m_Camera);
+
+		Hazel::Renderer::Submit(m_BackgroundShader, m_SquareVA);
+		Hazel::Renderer::Submit(m_TriangleShader, m_TriangleVA);
+
+		Hazel::Renderer::EndScene();
 	}
-
-	void OnEvent(Event& event) override {
-		if (event.GetEventType() == EventType::KeyPressed)
-		{
-			KeyPressedEvent& e = (KeyPressedEvent&)event;
-			if (e.GetKeyCode() == HZ_KEY_TAB)
-				HZ_TRACE("Tab key is pressed (event)!");
-			HZ_TRACE("{0}", (char)e.GetKeyCode());
-		}
-	}
-
 private:
-	std::shared_ptr<Shader> m_BackgroundShader;
-	std::shared_ptr<Shader> m_TriangleShader;
+	std::shared_ptr<Hazel::Shader> m_BackgroundShader;
+	std::shared_ptr<Hazel::Shader> m_TriangleShader;
 
-	std::shared_ptr<VertexArray> m_SquareVA;
-	std::shared_ptr<VertexArray> m_TriangleVA;
+	std::shared_ptr<Hazel::VertexArray> m_SquareVA;
+	std::shared_ptr<Hazel::VertexArray> m_TriangleVA;
+
+	Hazel::OrthographicCamera m_Camera;
+	glm::vec3 m_CameraPosition;
+	float m_CameraMoveSpeed = 0.1f;
+	float m_CameraRotation = 0.0f;
+	float m_CameraRotationSpeed = 2.5f;
 };
 
 
-class Sandbox : public Application {
+class Sandbox : public Hazel::Application {
 public:
-	Sandbox() {
+	Sandbox()
+	{
 		PushLayer(new DemoLayer());
 	}
 	~Sandbox() { }
 };
 
-Application* Hazel::CreateApplication() {
+Hazel::Application* Hazel::CreateApplication() {
 	return new Sandbox();
 }
