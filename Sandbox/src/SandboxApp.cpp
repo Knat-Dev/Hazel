@@ -211,9 +211,12 @@ public:
 		m_TextureShader.reset(Hazel::Shader::Create(textureShaderVertexSrc, TextureShaderFragmentSrc));
 
 		m_MinecraftTexture = Hazel::Texture2D::Create("assets/textures/minecraft.jpg");
+		m_CppLogoTexture = Hazel::Texture2D::Create("assets/textures/cpp.png");
 
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->Bind();
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
+
+		m_TextureShader.reset(Hazel::Shader::Create(textureShaderVertexSrc, TextureShaderFragmentSrc));
 	}
 
 	void OnUpdate(Hazel::Timestep ts) override {
@@ -251,6 +254,8 @@ public:
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_SquarePosition) * largeScale;
 
 		m_MinecraftTexture->Bind();
+		Hazel::Renderer::Submit(m_TextureShader, m_SquareVA, transform);
+		m_CppLogoTexture->Bind();
 		Hazel::Renderer::Submit(m_TextureShader, m_SquareVA, transform);
 
 		//Hazel::Renderer::Submit(m_TriangleShader, m_TriangleVA);
@@ -295,7 +300,7 @@ private:
 	Hazel::Ref<Hazel::Shader> m_BackgroundShader;
 	Hazel::Ref<Hazel::Shader> m_TriangleShader;
 
-	Hazel::Ref<Hazel::Texture2D> m_MinecraftTexture;
+	Hazel::Ref<Hazel::Texture2D> m_MinecraftTexture, m_CppLogoTexture;
 
 	Hazel::Ref<Hazel::VertexArray> m_SquareVA;
 	Hazel::Ref<Hazel::VertexArray> m_TriangleVA;
