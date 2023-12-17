@@ -15,43 +15,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Hazel\vendor\imgui\imconfig.h">
-      <Filter>Hazel\vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\imgui\imgui.h">
-      <Filter>Hazel\vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\imgui\imgui_internal.h">
-      <Filter>Hazel\vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\imgui\imstb_rectpack.h">
-      <Filter>Hazel\vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\imgui\imstb_textedit.h">
-      <Filter>Hazel\vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Hazel\vendor\imgui\imstb_truetype.h">
-      <Filter>Hazel\vendor\imgui</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\Hazel\vendor\imgui\imgui.cpp">
-      <Filter>Hazel\vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Hazel\vendor\imgui\imgui_demo.cpp">
-      <Filter>Hazel\vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Hazel\vendor\imgui\imgui_draw.cpp">
-      <Filter>Hazel\vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Hazel\vendor\imgui\imgui_tables.cpp">
-      <Filter>Hazel\vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Hazel\vendor\imgui\imgui_widgets.cpp">
-      <Filter>Hazel\vendor\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="src\SandboxApp.cpp">
       <Filter>src</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\Texture.glsl" />
+    <None Include="assets\shaders\FlatColor.glsl" />
   </ItemGroup>
 </Project>

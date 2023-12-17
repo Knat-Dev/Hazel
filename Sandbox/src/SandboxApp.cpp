@@ -104,119 +104,14 @@ public:
 		squareIB.reset(Hazel::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
 		m_SquareVA->SetIndexBuffer(squareIB);
 
-		std::string squareVertexSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_Position;
-			
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;
-
-			out vec3 v_Position;
-			
-			void main()
-			{
-				v_Position = a_Position;
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
-			}
-		)";
-
-		std::string squareFragmentSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) out vec4 color;
-			
-			in vec3 v_Position;
-			in vec4 v_Color;
-			
-			void main()
-			{
-				color = vec4(v_Position * 0.5 + 0.5, 1.0);
-			}
-		)";
-
-		m_BackgroundShader.reset(Hazel::Shader::Create(squareVertexSrc, squareFragmentSrc));
-
-		// Flat Color Shader
-		std::string flatColorShaderVertexSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_Position;
-			
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;
-
-			out vec3 v_Position;
-			
-			void main()
-			{
-				v_Position = a_Position;
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
-			}
-		)";
-
-		std::string flatColorShaderFragmentSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) out vec4 color;
-			
-			in vec3 v_Position;
-			
-			uniform vec3 u_Color;	
-			
-			void main()
-			{
-				color = vec4(u_Color, 1.0);
-			}
-		)";
-
-
-		m_FlatColorShader.reset(Hazel::Shader::Create(flatColorShaderVertexSrc, flatColorShaderFragmentSrc));
-
-		// Texture Shader
-		std::string textureShaderVertexSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec2 a_TexCoord;
-			
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;
-
-			out vec2 v_TexCoord;
-			
-			void main()
-			{
-				v_TexCoord = a_TexCoord;
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
-			}
-		)";
-
-		std::string TextureShaderFragmentSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) out vec4 color;
-
-			in vec2 v_TexCoord;
-
-			uniform sampler2D u_Texture;
-			
-			void main()
-			{
-				color = texture(u_Texture, v_TexCoord);
-			}
-		)";
-
-
-		m_TextureShader.reset(Hazel::Shader::Create(textureShaderVertexSrc, TextureShaderFragmentSrc));
+		m_FlatColorShader = Hazel::Shader::Create("assets/shaders/FlatColor.glsl");
 
 		m_MinecraftTexture = Hazel::Texture2D::Create("assets/textures/minecraft.jpg");
 		m_CppLogoTexture = Hazel::Texture2D::Create("assets/textures/cpp.png");
 
+		m_TextureShader = Hazel::Shader::Create("assets/shaders/Texture.glsl");
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->Bind();
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
-
-		m_TextureShader.reset(Hazel::Shader::Create(textureShaderVertexSrc, TextureShaderFragmentSrc));
 	}
 
 	void OnUpdate(Hazel::Timestep ts) override {
@@ -297,7 +192,6 @@ public:
 private:
 	Hazel::Ref<Hazel::Shader> m_FlatColorShader;
 	Hazel::Ref<Hazel::Shader> m_TextureShader;
-	Hazel::Ref<Hazel::Shader> m_BackgroundShader;
 	Hazel::Ref<Hazel::Shader> m_TriangleShader;
 
 	Hazel::Ref<Hazel::Texture2D> m_MinecraftTexture, m_CppLogoTexture;
