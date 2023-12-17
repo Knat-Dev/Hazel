@@ -40,42 +40,7 @@ public:
 
 		m_TriangleVA->SetIndexBuffer(triangleIB);
 
-		std::string triangleVertexSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec4 a_Color;
-
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;
-			
-			out vec3 v_Position;
-			out vec4 v_Color;
-			
-			void main()
-			{
-				v_Position = a_Position;
-				v_Color = a_Color;
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
-			}
-		)";
-
-		std::string triangleFragmentSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) out vec4 color;
-			
-			in vec3 v_Position;
-			in vec4 v_Color;
-			
-			void main()
-			{
-				color = vec4(v_Position * 0.5 + 0.5, 1.0);
-				color = v_Color;
-			}
-		)";
-
-		m_TriangleShader.reset(Hazel::Shader::Create(triangleVertexSrc, triangleFragmentSrc));
+		auto triangleShader = m_ShaderLibrary.Load("assets/shaders/TriangleShader.glsl");
 
 		////////////////////////////////////////////
 		// Square /////////////////////////////////
@@ -104,14 +69,16 @@ public:
 		squareIB.reset(Hazel::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
 		m_SquareVA->SetIndexBuffer(squareIB);
 
-		m_FlatColorShader = Hazel::Shader::Create("assets/shaders/FlatColor.glsl");
-
+		// Shaders
+		// 
+		// Flat color shader
+		auto flatColorShader = m_ShaderLibrary.Load("assets/shaders/FlatColor.glsl");
+		// Texture shader
 		m_MinecraftTexture = Hazel::Texture2D::Create("assets/textures/minecraft.jpg");
 		m_CppLogoTexture = Hazel::Texture2D::Create("assets/textures/cpp.png");
-
-		m_TextureShader = Hazel::Shader::Create("assets/shaders/Texture.glsl");
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->Bind();
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
+		auto textureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
+		textureShader->Bind();
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
 	}
 
 	void OnUpdate(Hazel::Timestep ts) override {
@@ -127,33 +94,36 @@ public:
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_FlatColorShader)->Bind();
+		auto flatColorShader = m_ShaderLibrary.Get("FlatColor");
+		flatColorShader->Bind();
 
 		for (int i = 0; i < 20; i++) {
 			for (int j = 0; j < 20; j++)
 			{
-				std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3("u_Color",
+				std::dynamic_pointer_cast<Hazel::OpenGLShader>(flatColorShader)->UploadUniformFloat3("u_Color",
 					(i + j) % 2 == 0 ? m_CheckerboardSquareColor1 : m_CheckerboardSquareColor2);
 
 
 				glm::vec3 pos(i * 0.11f, j * 0.11f, 0.0f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos + m_SquarePosition) * scale;
-				Hazel::Renderer::Submit(m_FlatColorShader, m_SquareVA, transform);
+				Hazel::Renderer::Submit(flatColorShader, m_SquareVA, transform);
 			}
 		}
 
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3("u_Color", m_CheckerboardSquareColor1);
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(flatColorShader)->UploadUniformFloat3("u_Color", m_CheckerboardSquareColor1);
 
 
 		glm::mat4 largeScale = glm::scale(glm::mat4(1.0f), glm::vec3(1.5f));
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_SquarePosition) * largeScale;
 
+		auto textureShader = m_ShaderLibrary.Get("Texture");
 		m_MinecraftTexture->Bind();
-		Hazel::Renderer::Submit(m_TextureShader, m_SquareVA, transform);
+		Hazel::Renderer::Submit(textureShader, m_SquareVA, transform);
 		m_CppLogoTexture->Bind();
-		Hazel::Renderer::Submit(m_TextureShader, m_SquareVA, transform);
+		Hazel::Renderer::Submit(textureShader, m_SquareVA, transform);
 
-		//Hazel::Renderer::Submit(m_TriangleShader, m_TriangleVA);
+		//auto triangleShader = m_ShaderLibrary.Get("TriangleShader");
+		//Hazel::Renderer::Submit(triangleShader, m_TriangleVA);
 
 		Hazel::Renderer::EndScene();
 	}
@@ -190,9 +160,7 @@ public:
 			m_SquarePosition.x += m_SquareMoveSpeed * ts;
 	}
 private:
-	Hazel::Ref<Hazel::Shader> m_FlatColorShader;
-	Hazel::Ref<Hazel::Shader> m_TextureShader;
-	Hazel::Ref<Hazel::Shader> m_TriangleShader;
+	Hazel::ShaderLibrary m_ShaderLibrary;
 
 	Hazel::Ref<Hazel::Texture2D> m_MinecraftTexture, m_CppLogoTexture;
 

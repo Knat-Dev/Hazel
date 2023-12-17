@@ -22,5 +22,6 @@
   <ItemGroup>
     <None Include="assets\shaders\Texture.glsl" />
     <None Include="assets\shaders\FlatColor.glsl" />
+    <None Include="assets\shaders\TriangleShader.glsl" />
   </ItemGroup>
 </Project>
