@@ -1,4 +1,6 @@
 #include <Hazel.h>
+#include <Hazel/Core/EntryPoint.h>
+
 #include "Platform/OpenGL/OpenGLShader.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -6,6 +8,8 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <imgui/imgui.h>
+
+#include "Sandbox2D.h"
 
 class DemoLayer : public Hazel::Layer {
 public:
@@ -23,7 +27,7 @@ public:
 			 0.0f,  0.5f, 0.0f, 0.7f, 0.2f, 0.65f, 1.0f
 		};
 		Hazel::Ref<Hazel::VertexBuffer> triangleVB;
-		triangleVB.reset(Hazel::VertexBuffer::Create(vertices, sizeof(vertices)));
+		triangleVB = Hazel::VertexBuffer::Create(vertices, sizeof(vertices));
 
 		{
 			triangleVB->SetLayout({
@@ -36,7 +40,7 @@ public:
 
 		uint32_t indices[3] = { 0, 1, 2 };
 		Hazel::Ref<Hazel::IndexBuffer> triangleIB;
-		triangleIB.reset(Hazel::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		triangleIB = Hazel::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 
 		m_TriangleVA->SetIndexBuffer(triangleIB);
 
@@ -54,7 +58,7 @@ public:
 		};
 
 		Hazel::Ref<Hazel::VertexBuffer> squareVB;
-		squareVB.reset(Hazel::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+		squareVB = Hazel::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
 
 		{
 			squareVB->SetLayout({
@@ -66,7 +70,7 @@ public:
 
 		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
 		Hazel::Ref<Hazel::IndexBuffer> squareIB;
-		squareIB.reset(Hazel::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+		squareIB = Hazel::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
 		m_SquareVA->SetIndexBuffer(squareIB);
 
 		// Shaders
@@ -100,7 +104,7 @@ public:
 		for (int i = 0; i < 20; i++) {
 			for (int j = 0; j < 20; j++)
 			{
-				std::dynamic_pointer_cast<Hazel::OpenGLShader>(flatColorShader)->UploadUniformFloat3("u_Color",
+				std::dynamic_pointer_cast<Hazel::OpenGLShader>(flatColorShader)->UploadUniformFloat4("u_Color",
 					(i + j) % 2 == 0 ? m_CheckerboardSquareColor1 : m_CheckerboardSquareColor2);
 
 
@@ -110,7 +114,7 @@ public:
 			}
 		}
 
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(flatColorShader)->UploadUniformFloat3("u_Color", m_CheckerboardSquareColor1);
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(flatColorShader)->UploadUniformFloat4("u_Color", m_CheckerboardSquareColor1);
 
 
 		glm::mat4 largeScale = glm::scale(glm::mat4(1.0f), glm::vec3(1.5f));
@@ -134,8 +138,8 @@ public:
 
 	void OnImGuiRender() override {
 		ImGui::Begin("Settings", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
-		ImGui::ColorEdit3("Checkerboard Color 1", glm::value_ptr(m_CheckerboardSquareColor1));
-		ImGui::ColorEdit3("Checkerboard Color 2", glm::value_ptr(m_CheckerboardSquareColor2));
+		ImGui::ColorEdit4("Checkerboard Color 1", glm::value_ptr(m_CheckerboardSquareColor1));
+		ImGui::ColorEdit4("Checkerboard Color 2", glm::value_ptr(m_CheckerboardSquareColor2));
 		ImGui::End();
 	}
 
@@ -163,8 +167,8 @@ private:
 	float m_SquareMoveSpeed = 1.0f;
 
 	// Checkerboard
-	glm::vec3 m_CheckerboardSquareColor1 = { 0.2f, 0.3f, 0.8f };
-	glm::vec3 m_CheckerboardSquareColor2 = { 0.3f, 0.2f, 0.8f };
+	glm::vec4 m_CheckerboardSquareColor1 = { 0.2f, 0.3f, 0.8f, 1.0f };
+	glm::vec4 m_CheckerboardSquareColor2 = { 0.3f, 0.2f, 0.8f, 1.0f };
 };
 
 
@@ -172,7 +176,7 @@ class Sandbox : public Hazel::Application {
 public:
 	Sandbox()
 	{
-		PushLayer(new DemoLayer());
+		PushLayer(new Sandbox2D());
 	}
 	~Sandbox() { }
 };

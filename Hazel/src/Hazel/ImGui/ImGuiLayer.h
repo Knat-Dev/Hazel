@@ -19,5 +19,6 @@ namespace Hazel {
 		void End();
 	private:
 		float m_Time = 0.0f;
+		static const bool m_ShowDemoWindow = false;
 	};
 }
