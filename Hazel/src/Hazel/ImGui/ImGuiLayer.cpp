@@ -1,7 +1,7 @@
 #include "hzpch.h"
-#include "Hazel/Core.h"
+#include "Hazel/Core/Core.h"
 #include "ImGuiLayer.h"
-#include "Hazel/Application.h"
+#include "Hazel/Core/Application.h"
 #include "Hazel/Events/MouseEvent.h"
 
 #define IMGUI_IMPL_API
@@ -10,7 +10,7 @@
 #include "GLFW/glfw3.h"
 #include "glad/glad.h"
 
-#include <Hazel/KeyCodes.h>
+#include <Hazel/Core/KeyCodes.h>
 
 namespace Hazel {
 	ImGuiLayer::ImGuiLayer()

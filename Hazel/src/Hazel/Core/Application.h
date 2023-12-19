@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Core.h"
+#include "Hazel/Core/Core.h"
 
 #include "Window.h"
-#include "Hazel/Layers/LayerStack.h"
+#include "Hazel/Core/LayerStack.h"
 #include "Hazel/Events/Event.h"
 #include "Hazel/Events/ApplicationEvent.h"
 
 #include "Hazel/Core/Timestep.h"
 
-#include "ImGui/ImGuiLayer.h"
+#include "Hazel/ImGui/ImGuiLayer.h"
 
 namespace Hazel {
 	class HAZEL_API Application
