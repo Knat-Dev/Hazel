@@ -10,7 +10,7 @@
 class DemoLayer : public Hazel::Layer {
 public:
 	DemoLayer()
-		: Hazel::Layer("Demo"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f), m_SquarePosition(0.0f)
+		: Hazel::Layer("Demo"), m_SquarePosition(0.0f), m_CameraController(16.0f / 9.0f, true)
 	{
 		////////////////////////////////////////////
 		// Triangle ///////////////////////////////
@@ -82,15 +82,15 @@ public:
 	}
 
 	void OnUpdate(Hazel::Timestep ts) override {
+		m_CameraController.OnUpdate(ts);
+
 		HandleKeyboardInput(ts);
 
 		Hazel::RenderCommand::SetClearColor({ 0.09020f, 0.10196f, 0.12157f, 1 });
 		Hazel::RenderCommand::Clear();
 
-		m_Camera.SetPosition(m_CameraPosition);
-		m_Camera.SetRotation(m_CameraRotation);
+		Hazel::Renderer::BeginScene(m_CameraController.GetCamera());
 
-		Hazel::Renderer::BeginScene(m_Camera);
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
@@ -105,7 +105,7 @@ public:
 
 
 				glm::vec3 pos(i * 0.11f, j * 0.11f, 0.0f);
-				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos + m_SquarePosition) * scale;
+				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
 				Hazel::Renderer::Submit(flatColorShader, m_SquareVA, transform);
 			}
 		}
@@ -128,6 +128,10 @@ public:
 		Hazel::Renderer::EndScene();
 	}
 
+	void OnEvent(Hazel::Event& e) override {
+		m_CameraController.OnEvent(e);
+	}
+
 	void OnImGuiRender() override {
 		ImGui::Begin("Settings", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 		ImGui::ColorEdit3("Checkerboard Color 1", glm::value_ptr(m_CheckerboardSquareColor1));
@@ -136,20 +140,6 @@ public:
 	}
 
 	void HandleKeyboardInput(Hazel::Timestep ts) {
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_LEFT))
-			m_CameraPosition.x -= m_CameraMoveSpeed * ts;
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_RIGHT))
-			m_CameraPosition.x += m_CameraMoveSpeed * ts;
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_UP))
-			m_CameraPosition.y += m_CameraMoveSpeed * ts;
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_DOWN))
-			m_CameraPosition.y -= m_CameraMoveSpeed * ts;
-
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_A))
-			m_CameraRotation += m_CameraRotationSpeed * ts;
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_D))
-			m_CameraRotation -= m_CameraRotationSpeed * ts;
-
 		if (Hazel::Input::IsKeyPressed(HZ_KEY_I))
 			m_SquarePosition.y += m_SquareMoveSpeed * ts;
 		if (Hazel::Input::IsKeyPressed(HZ_KEY_K))
@@ -167,12 +157,7 @@ private:
 	Hazel::Ref<Hazel::VertexArray> m_SquareVA;
 	Hazel::Ref<Hazel::VertexArray> m_TriangleVA;
 
-	Hazel::OrthographicCamera m_Camera;
-	glm::vec3 m_CameraPosition;
-	float m_CameraMoveSpeed = 5.0f;
-
-	float m_CameraRotation = 0.0f;
-	float m_CameraRotationSpeed = 180.0f;
+	Hazel::OrthographicCameraController m_CameraController;
 
 	glm::vec3 m_SquarePosition;
 	float m_SquareMoveSpeed = 1.0f;
