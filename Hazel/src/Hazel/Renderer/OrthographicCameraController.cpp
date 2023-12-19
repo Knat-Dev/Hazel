@@ -11,16 +11,17 @@ namespace Hazel {
 
 	void OrthographicCameraController::OnUpdate(Timestep ts)
 	{
+		float x = Input::IsKeyPressed(HZ_KEY_A) ? -1.0f : Input::IsKeyPressed(HZ_KEY_D) ? 1.0f : 0.0f;
+		float y = Input::IsKeyPressed(HZ_KEY_S) ? -1.0f : Input::IsKeyPressed(HZ_KEY_W) ? 1.0f : 0.0f;
+		glm::vec2 cameraVelocity = { x, y };
 
-		if (Input::IsKeyPressed(HZ_KEY_A))
-			m_CameraPosition.x -= m_CameraTranslationSpeed * ts;
-		if (Input::IsKeyPressed(HZ_KEY_D))
-			m_CameraPosition.x += m_CameraTranslationSpeed * ts;
-		if (Input::IsKeyPressed(HZ_KEY_W))
-			m_CameraPosition.y += m_CameraTranslationSpeed * ts;
-		if (Input::IsKeyPressed(HZ_KEY_S))
-			m_CameraPosition.y -= m_CameraTranslationSpeed * ts;
+		if (glm::length(cameraVelocity) > 0.00f)
+		{
+			glm::vec2 normalizedVelocity = glm::normalize(cameraVelocity) * m_CameraTranslationSpeed * m_CameraVelocityFactor * ts.GetSeconds();
 
+			m_CameraPosition.x += normalizedVelocity.x;
+			m_CameraPosition.y += normalizedVelocity.y;
+		}
 
 		if (m_Rotation)
 		{
