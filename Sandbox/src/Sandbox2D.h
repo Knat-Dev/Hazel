@@ -11,6 +11,7 @@ public:
 	virtual void OnDetach() override;
 
 	void OnUpdate(Hazel::Timestep ts) override;
+	void HandleInput(Hazel::Timestep ts);
 	virtual void OnImGuiRender() override;
 	void OnEvent(Hazel::Event& e) override;
 private:
@@ -19,4 +20,5 @@ private:
 	Hazel::Ref<Hazel::Shader> m_FlatColorShader;
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 	Hazel::OrthographicCameraController m_CameraController;
+	float m_QuadRotation = 0.0f;
 };

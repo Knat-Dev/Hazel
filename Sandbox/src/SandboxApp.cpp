@@ -104,7 +104,7 @@ public:
 		for (int i = 0; i < 20; i++) {
 			for (int j = 0; j < 20; j++)
 			{
-				std::dynamic_pointer_cast<Hazel::OpenGLShader>(flatColorShader)->UploadUniformFloat4("u_Color",
+				std::dynamic_pointer_cast<Hazel::OpenGLShader>(flatColorShader)->SetFloat4("u_Color",
 					(i + j) % 2 == 0 ? m_CheckerboardSquareColor1 : m_CheckerboardSquareColor2);
 
 
@@ -114,7 +114,7 @@ public:
 			}
 		}
 
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(flatColorShader)->UploadUniformFloat4("u_Color", m_CheckerboardSquareColor1);
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(flatColorShader)->SetFloat4("u_Color", m_CheckerboardSquareColor1);
 
 
 		glm::mat4 largeScale = glm::scale(glm::mat4(1.0f), glm::vec3(1.5f));

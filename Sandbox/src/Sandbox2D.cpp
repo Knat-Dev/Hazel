@@ -2,7 +2,6 @@
 #include "Sandbox2D.h"
 #include <imgui/imgui.h>
 #include <glm/gtc/type_ptr.hpp>
-#include <Platform/OpenGL/OpenGLShader.h>
 
 Sandbox2D::Sandbox2D()
 	: Layer("Sandbox2D"), m_CameraController(16.0f / 9.0f, true)
@@ -44,17 +43,23 @@ void Sandbox2D::OnUpdate(Hazel::Timestep ts)
 {
 	m_CameraController.OnUpdate(ts);
 
+	HandleInput(ts);
+
 	Hazel::RenderCommand::SetClearColor({ 0.09020f, 0.10196f, 0.12157f, 1 });
 	Hazel::RenderCommand::Clear();
 
-	Hazel::Renderer::BeginScene(m_CameraController.GetCamera());
-	{
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_FlatColorShader)->Bind();
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat4("u_Color", m_SquareColor);
+	Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
+	Hazel::Renderer2D::DrawQuad({ -1.0f, -0.5f }, { 2.0f, 1.0f }, m_QuadRotation, m_SquareColor);
+	Hazel::Renderer2D::DrawQuad({ 1.5f, 0.5f }, { 1.0f, 1.0f }, 0.0f, { 0.8f, 0.2f, 0.3f, 1.0f });
+	Hazel::Renderer2D::EndScene();
+}
 
-		Hazel::Renderer::Submit(m_FlatColorShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
-	}
-	Hazel::Renderer::EndScene();
+void Sandbox2D::HandleInput(Hazel::Timestep ts) {
+	if (Hazel::Input::IsKeyPressed(HZ_KEY_LEFT))
+		m_QuadRotation -= 360.0f * ts;
+	if (Hazel::Input::IsKeyPressed(HZ_KEY_RIGHT))
+		m_QuadRotation += 360.0f * ts;
+	m_QuadRotation += m_QuadRotation >= 360.0f ? -360.0f : m_QuadRotation < 0 ? 360.0f : 0.0f;
 }
 
 void Sandbox2D::OnImGuiRender() {
