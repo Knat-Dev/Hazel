@@ -7,8 +7,8 @@ public:
 	Sandbox2D();
 	virtual ~Sandbox2D() = default;
 
-	virtual void OnAttach() override;
-	virtual void OnDetach() override;
+	//virtual void OnAttach() override;
+	//virtual void OnDetach() override;
 
 	void OnUpdate(Hazel::Timestep ts) override;
 	void HandleInput(Hazel::Timestep ts);
@@ -19,7 +19,15 @@ private:
 	Hazel::Ref<Hazel::VertexArray> m_SquareVA;
 	Hazel::Ref<Hazel::Shader> m_FlatColorShader;
 	Hazel::Ref<Hazel::Texture2D> m_Texture;
-	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
+	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 0.75f };
 	Hazel::OrthographicCameraController m_CameraController;
 	float m_QuadRotation = 0.0f;
+
+	struct ProfileResult
+	{
+		const char* Name;
+		float Time;
+	};
+
+	std::vector<ProfileResult> m_ProfileResults;
 };
