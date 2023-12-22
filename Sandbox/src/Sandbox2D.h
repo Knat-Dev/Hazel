@@ -22,12 +22,4 @@ private:
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 0.75f };
 	Hazel::OrthographicCameraController m_CameraController;
 	float m_QuadRotation = 0.0f;
-
-	struct ProfileResult
-	{
-		const char* Name;
-		float Time;
-	};
-
-	std::vector<ProfileResult> m_ProfileResults;
 };
