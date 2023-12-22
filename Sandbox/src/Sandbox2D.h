@@ -5,10 +5,10 @@ class Sandbox2D : public Hazel::Layer
 {
 public:
 	Sandbox2D();
-	virtual ~Sandbox2D() = default;
+	virtual ~Sandbox2D();
 
-	//virtual void OnAttach() override;
-	//virtual void OnDetach() override;
+	virtual void OnAttach() override;
+	virtual void OnDetach() override;
 
 	void OnUpdate(Hazel::Timestep ts) override;
 	void HandleInput(Hazel::Timestep ts);

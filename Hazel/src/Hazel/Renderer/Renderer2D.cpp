@@ -17,6 +17,8 @@ namespace Hazel {
 
 	void Renderer2D::Init()
 	{
+		HZ_PROFILE_FUNCTION();
+
 		s_Data = new Renderer2DStorage();
 		s_Data->QuadVertexArray = VertexArray::Create();
 
@@ -54,6 +56,8 @@ namespace Hazel {
 
 	void Renderer2D::Shutdown()
 	{
+		HZ_PROFILE_FUNCTION();
+
 		delete s_Data;
 	}
 
@@ -67,12 +71,11 @@ namespace Hazel {
 
 	void Renderer2D::EndScene()
 	{
+		HZ_PROFILE_FUNCTION();
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color)
 	{
-		HZ_PROFILE_FUNCTION();
-
 		DrawQuad({ position.x, position.y, 0.0f }, size, rotation, color);
 	}
 
@@ -94,8 +97,6 @@ namespace Hazel {
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& scale, float rotation, const Ref<Texture2D>& texture)
 	{
-		HZ_PROFILE_FUNCTION();
-
 		DrawQuad({ position.x, position.y, 0.0f }, scale, rotation, texture);
 	}
 
