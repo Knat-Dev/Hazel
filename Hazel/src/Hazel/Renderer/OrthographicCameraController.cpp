@@ -7,10 +7,13 @@ namespace Hazel {
 	OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool rotation)
 		: m_CameraController(-m_AspectRatio * m_ZoomLevel, m_AspectRatio* m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel), m_AspectRatio(aspectRatio), m_Rotation(rotation)
 	{
+		HZ_PROFILE_FUNCTION();
 	}
 
 	void OrthographicCameraController::OnUpdate(Timestep ts)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		float x = Input::IsKeyPressed(HZ_KEY_A) ? -1.0f : Input::IsKeyPressed(HZ_KEY_D) ? 1.0f : 0.0f;
 		float y = Input::IsKeyPressed(HZ_KEY_S) ? -1.0f : Input::IsKeyPressed(HZ_KEY_W) ? 1.0f : 0.0f;
 		glm::vec2 cameraVelocity = { x, y };
@@ -40,6 +43,8 @@ namespace Hazel {
 
 	void OrthographicCameraController::OnEvent(Event& e)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<MouseScrolledEvent>(HZ_BIND_EVENT_FN(OrthographicCameraController::OnMouseScrolled));
 		dispatcher.Dispatch<WindowResizeEvent>(HZ_BIND_EVENT_FN(OrthographicCameraController::OnWindowResized));
@@ -47,6 +52,8 @@ namespace Hazel {
 
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		m_ZoomLevel -= e.GetYOffset() * 0.25f; // 0.25f is the zoom speed
 
 		m_ZoomLevel = std::max(m_ZoomLevel, 0.25f); // 0.25f is the minimum zoom level
@@ -58,6 +65,8 @@ namespace Hazel {
 
 	bool OrthographicCameraController::OnWindowResized(WindowResizeEvent& e)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
 
 		m_CameraController.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
