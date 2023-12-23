@@ -19,7 +19,10 @@ private:
 	Hazel::Ref<Hazel::VertexArray> m_SquareVA;
 	Hazel::Ref<Hazel::Shader> m_FlatColorShader;
 	Hazel::Ref<Hazel::Texture2D> m_Texture;
+	Hazel::Ref<Hazel::QuadData2D> m_QuadData;
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 0.75f };
+	glm::vec4 m_SquareTint = { 1.0f, 1.0f, 1.0f, 1.0f };
 	Hazel::OrthographicCameraController m_CameraController;
 	float m_QuadRotation = 0.0f;
+	float m_QuadRotationSpeed = glm::radians(360.0f);
 };
