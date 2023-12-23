@@ -188,6 +188,7 @@ namespace Hazel {
 		HZ_PROFILE_FUNCTION();
 		auto [transform, color, texture, tilingFactor, tint] = *data;
 
+
 		s_Data->TextureShader->SetFloat("u_TilingFactor", tilingFactor);
 		s_Data->TextureShader->SetFloat4("u_Color", color);
 		s_Data->TextureShader->SetFloat4("u_Tint", tint);

@@ -35,6 +35,142 @@ namespace Hazel {
 		QuadData3D() = default;
 	};
 
+	class QuadData2DBuilder
+	{
+	public:
+		QuadData2DBuilder()
+			: m_Data(CreateRef<QuadData2D>())
+		{
+		}
+
+		QuadData2DBuilder& SetPosition(const glm::vec2& position)
+		{
+			m_Data->transform->position = position;
+			return *this;
+		}
+
+		QuadData2DBuilder& SetPosition(float x, float y)
+		{
+			m_Data->transform->position = { x, y };
+			return *this;
+		}
+
+		QuadData2DBuilder& SetScale(const glm::vec2& scale)
+		{
+			m_Data->transform->scale = scale;
+			return *this;
+		}
+
+		QuadData2DBuilder& SetScale(float x, float y)
+		{
+			m_Data->transform->scale = { x, y };
+			return *this;
+		}
+
+		QuadData2DBuilder& SetRotation(float rotation)
+		{
+			m_Data->transform->rotation = rotation;
+			return *this;
+		}
+
+		QuadData2DBuilder& SetColor(const glm::vec4& color)
+		{
+			m_Data->color = color;
+			return *this;
+		}
+
+		QuadData2DBuilder& SetTexture(const Ref<Texture2D>& texture)
+		{
+			m_Data->texture = texture;
+			return *this;
+		}
+
+		QuadData2DBuilder& SetTilingFactor(float tilingFactor)
+		{
+			m_Data->tilingFactor = tilingFactor;
+			return *this;
+		}
+
+		QuadData2DBuilder& SetTint(const glm::vec4& tint)
+		{
+			m_Data->tint = tint;
+			return *this;
+		}
+
+		operator Ref<QuadData2D>() { return m_Data; }
+
+	private:
+		Ref<QuadData2D> m_Data;
+	};
+
+	class QuadData3DBuilder
+	{
+	public:
+		QuadData3DBuilder()
+			: m_Data(CreateRef<QuadData3D>())
+		{
+		}
+
+		QuadData3DBuilder& SetPosition(const glm::vec3& position)
+		{
+			m_Data->transform->position = position;
+			return *this;
+		}
+
+		QuadData3DBuilder& SetPosition(float x, float y, float z)
+		{
+			m_Data->transform->position = { x, y, z };
+			return *this;
+		}
+
+		QuadData3DBuilder& SetScale(const glm::vec3& scale)
+		{
+			m_Data->transform->scale = scale;
+			return *this;
+		}
+
+		QuadData3DBuilder& SetScale(float x, float y, float z)
+		{
+			m_Data->transform->scale = { x, y, z };
+			return *this;
+		}
+
+		QuadData3DBuilder& SetRotation(float rotation)
+		{
+			m_Data->transform->rotation = rotation;
+			return *this;
+		}
+
+		QuadData3DBuilder& SetColor(const glm::vec4& color)
+		{
+			m_Data->color = color;
+			return *this;
+		}
+
+		QuadData3DBuilder& SetTexture(const Ref<Texture2D>& texture)
+		{
+			m_Data->texture = texture;
+			return *this;
+		}
+
+		QuadData3DBuilder& SetTilingFactor(float tilingFactor)
+		{
+			m_Data->tilingFactor = tilingFactor;
+			return *this;
+		}
+
+		QuadData3DBuilder& SetTint(const glm::vec4& tint)
+		{
+			m_Data->tint = tint;
+			return *this;
+		}
+
+		operator Ref<QuadData3D>() { return m_Data; }
+
+	private:
+		Ref<QuadData3D> m_Data;
+	};
+
 	class Renderer2D
 	{
 	public:

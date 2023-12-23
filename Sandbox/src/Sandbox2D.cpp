@@ -19,13 +19,12 @@ void Sandbox2D::OnAttach()
 
 	m_Texture = Hazel::Texture2D::Create("assets/textures/checkerboard.png");
 
-	m_QuadData = Hazel::CreateRef<Hazel::QuadData3D>();
-	m_QuadData->transform->position = { 0.0f, 0.0f, -0.1f };
-	m_QuadData->transform->scale = { 40.0f, 40.0f, 1.0f };
-	m_QuadData->texture = m_Texture;
-	m_QuadData->tilingFactor = 20.0f;
-	m_QuadData->tint = m_BackgroundTintColor;
-	m_QuadData->transform->rotation = m_QuadRotation;
+	m_QuadData = Hazel::QuadData3DBuilder().
+		SetPosition({ 0.0f, 0.0f, -0.1f }).
+		SetScale({ 40.0f, 40.0f, 1.0f }).
+		SetTint(m_BackgroundTintColor).
+		SetTexture(m_Texture).
+		SetTilingFactor(20.0f);
 }
 
 void Sandbox2D::OnDetach()
@@ -57,12 +56,8 @@ void Sandbox2D::OnUpdate(Hazel::Timestep ts)
 
 		m_QuadData->tint = m_BackgroundTintColor;
 		Hazel::Renderer2D::DrawQuad(m_QuadData);
-
 		Hazel::Renderer2D::DrawRotatedQuad({ 0.5f, -0.5f }, { 0.5f, 0.5f }, m_QuadRotation, m_SquareColor);
-
-
 		Hazel::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 1.6f }, { 0.8f, 0.2f, 0.3f, 0.8f });
-
 		Hazel::Renderer2D::EndScene();
 	}
 }
