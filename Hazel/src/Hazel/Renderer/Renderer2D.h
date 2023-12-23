@@ -24,6 +24,17 @@ namespace Hazel {
 		QuadData2D() = default;
 	};
 
+	struct QuadData3D
+	{
+		Ref<Transform<glm::vec3>> transform = CreateRef<Transform<glm::vec3>>();
+		glm::vec4 color = glm::vec4(1.0f);
+		Ref<Texture2D> texture = nullptr;
+		float tilingFactor = 1.0f;
+		glm::vec4 tint = glm::vec4(1.0f);
+
+		QuadData3D() = default;
+	};
+
 	class Renderer2D
 	{
 	public:
@@ -51,5 +62,6 @@ namespace Hazel {
 
 		// with struct
 		static void DrawQuad(const Ref<QuadData2D>& data);
+		static void DrawQuad(const Ref<QuadData3D>& data);
 	};
 }

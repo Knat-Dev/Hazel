@@ -19,11 +19,12 @@ void Sandbox2D::OnAttach()
 
 	m_Texture = Hazel::Texture2D::Create("assets/textures/checkerboard.png");
 
-	m_QuadData = Hazel::CreateRef<Hazel::QuadData2D>();
-	m_QuadData->transform = Hazel::CreateRef<Hazel::Transform<glm::vec2>>();
-	m_QuadData->transform->position = { 0.5f, -0.5f };
-	m_QuadData->transform->scale = { 0.5f, 0.5f };
-	m_QuadData->color = m_SquareColor;
+	m_QuadData = Hazel::CreateRef<Hazel::QuadData3D>();
+	m_QuadData->transform->position = { 0.0f, 0.0f, -0.1f };
+	m_QuadData->transform->scale = { 40.0f, 40.0f, 1.0f };
+	m_QuadData->texture = m_Texture;
+	m_QuadData->tilingFactor = 20.0f;
+	m_QuadData->tint = m_BackgroundTintColor;
 	m_QuadData->transform->rotation = m_QuadRotation;
 }
 
@@ -54,12 +55,11 @@ void Sandbox2D::OnUpdate(Hazel::Timestep ts)
 
 		Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-		Hazel::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 20.0f, 20.0f }, m_Texture, 10.0f);
-
-		m_QuadData->tint = m_SquareTint;
-		m_QuadData->color = m_SquareColor;
-		m_QuadData->transform->rotation = m_QuadRotation;
+		m_QuadData->tint = m_BackgroundTintColor;
 		Hazel::Renderer2D::DrawQuad(m_QuadData);
+
+		Hazel::Renderer2D::DrawRotatedQuad({ 0.5f, -0.5f }, { 0.5f, 0.5f }, m_QuadRotation, m_SquareColor);
+
 
 		Hazel::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 1.6f }, { 0.8f, 0.2f, 0.3f, 0.8f });
 
@@ -80,8 +80,7 @@ void Sandbox2D::OnImGuiRender() {
 
 	ImGui::Begin("Settings", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
-	ImGui::ColorEdit4("Square Tint", glm::value_ptr(m_SquareTint));
-
+	ImGui::ColorEdit4("Square Tint", glm::value_ptr(m_BackgroundTintColor));
 	ImGui::End();
 }
 
