@@ -18,10 +18,11 @@
     <ClCompile Include="src\SandboxApp.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sandbox2D.cpp" />
+    <ClCompile Include="src\ParticleSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="assets\shaders\Texture.glsl" />
-    <None Include="assets\shaders\FlatColor.glsl" />
-    <None Include="assets\shaders\TriangleShader.glsl" />
+    <ClInclude Include="src\Sandbox2D.h" />
+    <ClInclude Include="src\ParticleSystem.h" />
   </ItemGroup>
 </Project>
